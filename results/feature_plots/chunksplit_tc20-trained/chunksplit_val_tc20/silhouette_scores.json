@@ -1,0 +1,26 @@
+{
+  "image_tc_chunksplit_tc20": {
+    "dataset": 0.26342204213142395,
+    "class": -0.12461350858211517
+  },
+  "image_sc_chunksplit_tc20": {
+    "dataset": 0.2427108883857727,
+    "class": -0.07877115905284882
+  },
+  "image_pooled_tc20": {
+    "dataset": 0.1517743170261383,
+    "class": -0.06796926259994507
+  },
+  "roi_tc_chunksplit_tc20": {
+    "dataset": 0.042188141494989395,
+    "class": -0.1000104546546936
+  },
+  "roi_sc_chunksplit_tc20": {
+    "dataset": 0.039579279720783234,
+    "class": -0.10185489803552628
+  },
+  "roi_pooled_tc20": {
+    "dataset": 0.046585556119680405,
+    "class": -0.061709389090538025
+  }
+}

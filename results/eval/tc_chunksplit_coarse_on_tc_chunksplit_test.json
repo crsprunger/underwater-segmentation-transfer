@@ -1,0 +1,68 @@
+{
+  "source_dataset": "coarse",
+  "target_dataset": "trashcan",
+  "target_ann": "trashcan_data/trashcan_chunksplit_test.json",
+  "checkpoint": "checkpoints/trashcan_chunksplit_coarse/model6v2/best_model.pth",
+  "eval_space": "coarse",
+  "preprocess": "none",
+  "metrics": {
+    "box_mAP": 0.2740110471978388,
+    "box_mAP_50": 0.45083643952809005,
+    "box_mAP_75": 0.2925904479199043,
+    "box_mAP_small": 0.31201692988358476,
+    "box_mAP_medium": 0.28137590420631525,
+    "box_mAP_large": 0.27568496184881996,
+    "mask_mAP": 0.2310226282945716,
+    "mask_mAP_50": 0.44313626008741885,
+    "mask_mAP_75": 0.21132569062273326,
+    "mask_mAP_small": 0.3171582779121475,
+    "mask_mAP_medium": 0.24113943963490134,
+    "mask_mAP_large": 0.22696906209967524,
+    "per_class_ap": {
+      "rov": 0.3762,
+      "organic": 0.1415,
+      "trash_easy": 0.2137,
+      "trash_entangled": 0.2859,
+      "trash_heavy": 0.1377
+    }
+  },
+  "grouped_metrics": {
+    "ternary": {
+      "box_mAP": 0.3318913355177475,
+      "box_mAP_50": 0.5424290895089746,
+      "box_mAP_75": 0.36171900313947025,
+      "box_mAP_small": 0.3451382856874231,
+      "box_mAP_medium": 0.3294304298582815,
+      "box_mAP_large": 0.3021037620008993,
+      "mask_mAP": 0.2692947141712282,
+      "mask_mAP_50": 0.535382330291209,
+      "mask_mAP_75": 0.2232048910710491,
+      "mask_mAP_small": 0.3836227230975255,
+      "mask_mAP_medium": 0.25833185116039264,
+      "mask_mAP_large": 0.24226612582316934,
+      "per_class_ap": {
+        "rov": 0.3762,
+        "non_trash": 0.1415,
+        "trash": 0.2902
+      }
+    },
+    "binary": {
+      "box_mAP": 0.3048716618513431,
+      "box_mAP_50": 0.5261555394327541,
+      "box_mAP_75": 0.32134224653621773,
+      "box_mAP_small": 0.2677427040783368,
+      "box_mAP_medium": 0.3033187796920678,
+      "box_mAP_large": 0.3942354922538128,
+      "mask_mAP": 0.24081727489122956,
+      "mask_mAP_50": 0.518482678364797,
+      "mask_mAP_75": 0.1839064343582064,
+      "mask_mAP_small": 0.22562689438909939,
+      "mask_mAP_medium": 0.23366318888037588,
+      "mask_mAP_large": 0.31277864987286064,
+      "per_class_ap": {
+        "non_trash": 0.1915,
+        "trash": 0.2902
+      }
+    }
+  }
+}

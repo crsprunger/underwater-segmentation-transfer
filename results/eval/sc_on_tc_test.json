@@ -1,0 +1,104 @@
+{
+  "source_dataset": "seaclear",
+  "target_dataset": "trashcan",
+  "target_ann": "trashcan_data/trashcan_test.json",
+  "checkpoint": "checkpoints/seaclear/model6v2/best_model.pth",
+  "eval_space": "tc20",
+  "preprocess": "none",
+  "metrics": {
+    "box_mAP": 0.005918423884506484,
+    "box_mAP_50": 0.009695046328739607,
+    "box_mAP_75": 0.00612079902673416,
+    "box_mAP_small": 0.008132209823126473,
+    "box_mAP_medium": 0.01918616791121788,
+    "box_mAP_large": 0.007695745192175916,
+    "mask_mAP": 0.005496755740616164,
+    "mask_mAP_50": 0.009653482990873853,
+    "mask_mAP_75": 0.006006255354875021,
+    "mask_mAP_small": 0.007541047870901909,
+    "mask_mAP_medium": 0.017749026498466408,
+    "mask_mAP_large": 0.006833186458451682,
+    "per_class_ap": {
+      "rov": 0.0149,
+      "plant": 0.0,
+      "animal_fish": 0.0013,
+      "animal_starfish": 0.0,
+      "animal_shells": 0.0008,
+      "animal_etc": 0.001,
+      "trash_clothing": 0.0256,
+      "trash_pipe": 0.0,
+      "trash_bottle": 0.0136,
+      "trash_bag": 0.0017,
+      "trash_snack_wrapper": 0.0,
+      "trash_can": 0.0088,
+      "trash_cup": 0.0127,
+      "trash_container": 0.0063,
+      "trash_unknown_instance": 0.0119,
+      "trash_branch": 0.0067,
+      "trash_wreckage": 0.0032,
+      "trash_tarp": 0.0013,
+      "trash_rope": 0.0002,
+      "trash_net": 0.0
+    }
+  },
+  "grouped_metrics": {
+    "coarse": {
+      "box_mAP": 0.010434026443703798,
+      "box_mAP_50": 0.020805256382191925,
+      "box_mAP_75": 0.010188747741438057,
+      "box_mAP_small": 0.014742902793508102,
+      "box_mAP_medium": 0.02063491820759047,
+      "box_mAP_large": 0.010255119146084693,
+      "mask_mAP": 0.010999808742733694,
+      "mask_mAP_50": 0.021885728296186055,
+      "mask_mAP_75": 0.010993733820919695,
+      "mask_mAP_small": 0.014498712983610312,
+      "mask_mAP_medium": 0.02097732703372615,
+      "mask_mAP_large": 0.009138197827035933,
+      "per_class_ap": {
+        "rov": 0.0149,
+        "organic": 0.0013,
+        "trash_easy": 0.0212,
+        "trash_entangled": 0.0055,
+        "trash_heavy": 0.0121
+      }
+    },
+    "ternary": {
+      "box_mAP": 0.030775362695380594,
+      "box_mAP_50": 0.05567852080681693,
+      "box_mAP_75": 0.03155520217719658,
+      "box_mAP_small": 0.028126602277546504,
+      "box_mAP_medium": 0.03319091345166491,
+      "box_mAP_large": 0.04575907607027101,
+      "mask_mAP": 0.026443652794992903,
+      "mask_mAP_50": 0.054593954433627835,
+      "mask_mAP_75": 0.02662397452505047,
+      "mask_mAP_small": 0.02532947597957412,
+      "mask_mAP_medium": 0.030502224276313897,
+      "mask_mAP_large": 0.03602927948821736,
+      "per_class_ap": {
+        "rov": 0.0149,
+        "non_trash": 0.0013,
+        "trash": 0.0631
+      }
+    },
+    "binary": {
+      "box_mAP": 0.043007793826193394,
+      "box_mAP_50": 0.07605021223759299,
+      "box_mAP_75": 0.0445236809653465,
+      "box_mAP_small": 0.036978256650406285,
+      "box_mAP_medium": 0.04619714058784871,
+      "box_mAP_large": 0.0678960281937312,
+      "mask_mAP": 0.03623537302017691,
+      "mask_mAP_50": 0.07471741745629676,
+      "mask_mAP_75": 0.03756838619335866,
+      "mask_mAP_small": 0.031967899509525756,
+      "mask_mAP_medium": 0.03896959674867332,
+      "mask_mAP_large": 0.05132655504181534,
+      "per_class_ap": {
+        "non_trash": 0.0093,
+        "trash": 0.0631
+      }
+    }
+  }
+}

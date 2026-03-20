@@ -1,0 +1,27 @@
+train_ann_path: trashcan_data/trashcan_sr_train.json  # path to COCO-format train annotation JSON
+val_ann_path: trashcan_data/trashcan_sr_val.json    # path to COCO-format val annotation JSON
+train_img_dir: trashcan_data/images_sr_sf1.0   # directory containing training images
+val_img_dir: trashcan_data/images_sr_sf1.0     # directory containing validation images
+num_epochs: 50
+batch_size: 8
+lr: 0.005
+momentum: 0.9
+weight_decay: 0.0001
+optimizer: sgd
+min_size: !!python/tuple [768, 800, 832]
+max_size: 1600
+lr_scheduler_type: cosine
+cosine_eta_min: 0.00005
+warmup_epochs: 1
+warmup_factor: 0.001
+use_group_norm: true
+gn_num_groups: 32
+use_v1_arch: false
+use_amp: true
+use_custom_anchor_generator: true
+custom_anchor_sizes: !!python/tuple [ !!python/tuple [16], !!python/tuple [32], !!python/tuple [64], !!python/tuple [128], !!python/tuple [256]]
+use_custom_rpn_fg_iou_threshold: false
+use_copy_paste: false
+verbose: true
+print_freq: 50
+num_workers: 8
