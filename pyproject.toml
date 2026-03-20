@@ -33,10 +33,14 @@ dependencies = [
     "six>=1.17.0",
     "streamlit>=1.55.0",
     "sympy>=1.14.0",
-    "torch>=2.10.0",
-    "torchvision>=0.25.0",
     "tqdm==4.40.2",
     "umap-learn>=0.5.11",
+]
+
+[project.optional-dependencies]
+torch = [
+    "torch>=2.10.0",
+    "torchvision>=0.25.0",
 ]
 
 [[tool.uv.index]]
