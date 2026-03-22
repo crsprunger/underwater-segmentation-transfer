@@ -93,7 +93,7 @@ class TrainingConfig:
     custom_anchor_sizes: tuple = ((16,), (32,), (64,), (128,), (256,))
     custom_aspect_ratios: tuple = ((0.5, 1.0, 2.0),)
 
-    # Custom RPN foreground IoU threshold: lower value to better catch smaller objects. (Unused in our published experiments thus far.)
+    # Custom RPN foreground IoU threshold: lower value to better catch smaller objects.
     use_custom_rpn_fg_iou_threshold: bool = False
     custom_rpn_fg_iou_threshold: float = 0.5  # Lower value to catch smaller objects
 
@@ -102,7 +102,7 @@ class TrainingConfig:
     #   the box heads more positive examples to learn from (helpful if recall
     #   is low), while decreasing it gives more hard negatives (helpful if
     #   precision is low). The RPN fraction works similarly but at the region
-    #   proposal stage. (Unused in our published experiments thus far.)
+    #   proposal stage.
     use_custom_positive_proposal_fractions: bool = False
     custom_rpn_positive_fraction: float = 0.5
     custom_box_positive_fraction: float = 0.25
