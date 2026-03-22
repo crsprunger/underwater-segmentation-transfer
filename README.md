@@ -1,9 +1,5 @@
 # Cross-Dataset Generalization of Underwater Instance Segmentation
 
-**Carsten Sprunger**
-
-Erdős Institute Deep Learning Boot Camp — Spring 2026
-
 ---
 
 All results and visualizations described below can be explored interactively via the [interactive Streamlit dashboard](https://underwater-segmentation-transfer-xtdrr5mjedczky9mqtwg6p.streamlit.app/) attached to this GitHub repository (`app.py`) or viewed in raw form in the `results` directory.
