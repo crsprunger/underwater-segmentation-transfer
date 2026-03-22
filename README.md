@@ -2,7 +2,9 @@
 
 ---
 
-All results and visualizations described below can be explored interactively via the [interactive Streamlit dashboard](https://underwater-segmentation-transfer-xtdrr5mjedczky9mqtwg6p.streamlit.app/) attached to this GitHub repository (`app.py`) or viewed in raw form in the `results` directory.
+## 0. Interactive Streamlit Dashboard
+
+The results and visualizations described in the following sections, as well as example model predictions for each model, can be explored interactively via the [Streamlit dashboard](https://underwater-segmentation-transfer-xtdrr5mjedczky9mqtwg6p.streamlit.app/) attached to this repository (implemented in `app.py`). We recommend exploring it while reading the following sections to aid in understanding the project. The dashboard has four interactive views: (1) a cross-dataset results explorer with configurable metrics and category spaces; (2) t-SNE/UMAP feature space projections colored by dataset and class, with silhouette score overlays; (3) best and worst prediction visualizations per evaluation cell; and (4) training curve comparisons across models. All data is loaded dynamically from the `results` directory.
 
 ## 1. Introduction
 
@@ -181,10 +183,6 @@ All model keys, target datasets, feature split definitions, and comparison group
 ### Category Remapping
 
 The `src.category_groups` module implements the full category hierarchy. Functions like `get_scheme()`, `detect_source_space()`, and `coarsest_common_space()` allow the evaluation code to automatically determine the appropriate evaluation space for any model-target pair and remap ground truth annotations accordingly. This is used throughout the cross-dataset evaluation, feature visualization, and prediction visualization pipelines.
-
-### Interactive Dashboard
-
-A Streamlit app (`app.py`) provides four interactive views: (1) a cross-dataset results explorer with configurable metrics and category spaces; (2) t-SNE/UMAP feature space projections colored by dataset and class, with silhouette score overlays; (3) best and worst prediction visualizations per evaluation cell; and (4) training curve comparisons across models. All data is loaded dynamically from the results directory.
 
 
 ## 10. Conclusions
