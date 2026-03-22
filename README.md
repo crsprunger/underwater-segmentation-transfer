@@ -2,7 +2,7 @@
 
 ---
 
-## 0. Interactive Streamlit Dashboard
+### Interactive Streamlit Dashboard
 
 The results and visualizations described in the following sections, as well as example model predictions for each model, can be explored interactively via the [Streamlit dashboard](https://underwater-segmentation-transfer-xtdrr5mjedczky9mqtwg6p.streamlit.app/) attached to this repository (implemented in `app.py`). We recommend exploring it while reading the following sections to aid in understanding the project. The dashboard has four interactive views: (1) a cross-dataset results explorer with configurable metrics and category spaces; (2) t-SNE/UMAP feature space projections colored by dataset and class, with silhouette score overlays; (3) best and worst prediction visualizations per evaluation cell; and (4) training curve comparisons across models. All data is loaded dynamically from the `results` directory.
 
