@@ -80,7 +80,7 @@ We trained models in six configurations, varying the training data and the categ
 
 Every model is evaluated on both TC chunksplit test and SC chunksplit test. For cross-dataset evaluation, ground truth annotations are remapped to the coarsest common category space between the model's training space and the target dataset's native space. COCO evaluation metrics (mAP, mAP@50, mAP@75) are computed separately for both mask and box predictions.
 
-We also trained two augmentation variants as exploratory experiments: **SC+grayscale** (random grayscale with p=0.4, aimed at reducing color-based domain cues) and **SC+overlay** (a custom overlay augmentation). These were evaluated in both native and TC20 spaces.
+We also trained two augmentation variants (described in greater detail in section 7.5 below) as exploratory experiments: **SC+grayscale** (random grayscale with p=0.4, aimed at reducing color-based domain cues) and **SC+overlay** (a custom overlay augmentation). These were evaluated in both native and TC20 spaces.
 
 
 ## 7. Results
@@ -146,16 +146,35 @@ For completeness, the full cross-evaluation matrix across all model variants:
 
 ### 7.5 Augmentation Experiments
 
+#### 7.5.1 Domain-Agnostic Experiments
+
+While looking through the dataset images as well as example model predictions, we noticed some obvious general differences betweeen those in TrashCan and those in SeaClear; two of those differences were that the TrashCan images all have CCTV-style text overlays from the cameras the videos were recorded with (which seemed to confuse the SeaClear-trained models in some examples) and that the ranges of scenes' dominant colors are quite different between the two datasets. As will be described in section 8 below, we believe that visual differences drive the cross-dataset performance gap, so we ran experiements to see if we could help the models learn to be more robust in these areas: 
+
+- **Text Overlays** Add synthetic text overlays to the SeaClear images similar to those already present in the TrashCan images; then, train a model on the resulting SeaClear+overlay images. The idea here was to teach the SeaClear model to ignore the text as it appeared the TrashCan model had already learned to do. This may not seem at first to be a domain-agnostic experiment because it was inspired by differences between two specific datasets, but the text overlays are essentially independent from everything else in the images and carry practically no information relevant to instance segmentation, so we consider it to be domain-agnostic.
+
+- **Random Grayscale** The second experiment was done by training another model on SeaClear, randomly (with probability 0.4) replacing each (RGB) image during training with the grayscale image of its luminance values; the idea here was to force the model to rely less on color differences. One could also, for example, randomly permute (and/or drop) input color channels, but the grayscale experiment was chosen for its simplicity.
+
 Neither grayscale augmentation nor the overlay augmentation improved cross-domain transfer. SC+grayscale achieved 0.010 mAP@50 on TC test (vs. 0.011 for vanilla SC), and SC+overlay achieved 0.008 (worse). Both maintained near-baseline in-domain SC performance. The failure of grayscale augmentation to help — despite the intuition that it would reduce color-based domain cues — suggests that the domain gap is not primarily driven by color differences.
 
+#### 7.5.2 Domain-Specific Experiments 
+
+After these experiments, we began to suspect that increasing cross-dataset performance would require more domain-specific techniques. We wrote code to try out two such ideas--test-time Fourier Domain Adaptation (FDA) and training time Fourier Style Restitution (FSR)--but have not gotten around to running any experiments yet. The experiments we would like to run are as follows:
+
+- **FDA** (TTA) Compute either global averages or chunked averages (grouping similar images and averaging within groups) of the TrashCan images' low-frequency disks in Fourier space; then, when evaluating a TrashCan-trained model on a SeaClear image, replace the SeaClear image's low-frequency disk (in Fourier space) with either the global average, one of the chunked averages selected randomly, or with some/all of the chunked averages, and use the resulting image(s) as input to the TrashCan model (and average the results for a final prediction in the last case).
+
+- **FSR** Compile a pool of underwater images; this could just be SeaClear's images, TrashCan's images, or both, but it could also be a larger pool of images possibly including these but also including others from other sources, which is the primary idea we planned to test. Then, during training, either randomly (with some probability) replace each training image's low-frequency disk with that of a randomly selected image from the pool, or pre-compute chunked averages (as above) of the low-frequency disks from the pool and randomly replace the training image's low-frequency disk with one of those, which is the primary method we planned to test.
+
+Both the test-time and training-time versions are implemented in our training pipeline (see primarily [`train.py`](https://github.com/crsprunger/underwater-segmentation-transfer/blob/main/src/train.py), [`training_config.py`](https://github.com/crsprunger/underwater-segmentation-transfer/blob/main/src/training_config.py), [`augmentation.py`](https://github.com/crsprunger/underwater-segmentation-transfer/blob/main/src/augmentation.py), and [`evaluation.py`](https://github.com/crsprunger/underwater-segmentation-transfer/blob/main/src/evaluation.py)), though we did not find time to run the planned experiments. The global/clustered averaging preprocessing steps are shared across both versions and implemented in [`compute_fda_spectrum.py`](https://github.com/crsprunger/underwater-segmentation-transfer/blob/main/tta/compute_fda_spectrum.py).
 
 ## 8. Feature Space Analysis
+
+### 8.1 Overview
 
 To understand *why* cross-dataset transfer fails, we extracted features from the ResNet-50 backbone and analyzed their structure using dimensionality reduction and silhouette scores.
 
 For each model, we extracted two types of features from both TC and SC test images: **image-level** embeddings (global average pooling of the `layer4` output, yielding a 2048-d vector per image) and **ROI-level** embeddings (7×7 ROI-aligned crops for each detected object, pooled to 2048-d). These were projected to 2D using both t-SNE and UMAP for visualization, and silhouette scores were computed to quantify clustering quality.
 
-### Image-level silhouette scores (chunksplit test, coarse space):
+### 8.2 Image-level silhouette scores (chunksplit test, coarse space):
 
 | Model | Dataset silhouette | Class silhouette |
 |:--|:-:|:-:|
@@ -163,7 +182,7 @@ For each model, we extracted two types of features from both TC and SC test imag
 | SC model | 0.332 | 0.083 |
 | Pooled (coarse) | 0.207 | 0.074 |
 
-### Image-level silhouette scores (chunksplit test, TC20 space):
+### 8.3 Image-level silhouette scores (chunksplit test, TC20 space):
 
 | Model | Dataset silhouette | Class silhouette |
 |:--|:-:|:-:|
@@ -180,13 +199,13 @@ ROI-level silhouette scores are much lower (0.03–0.08 for dataset, near-zero f
 
 ## 9. Infrastructure
 
-### Evaluation Pipeline
+### 9.1 Evaluation Pipeline
 
 A single orchestrator script (`compile_results.py`) runs the full evaluation and analysis pipeline in four stages: (1) cross-dataset evaluation for all model-target pairs, (2) feature extraction and projection, (3) optional prediction visualizations (best/worst per cell), and (4) summary compilation into a single JSON. The pipeline is idempotent — it skips already-computed results unless `--force` is passed — and supports selective execution via `--skip-evals`, `--skip-features`, or `--compile-only` flags.
 
 All model keys, target datasets, feature split definitions, and comparison groups are defined in a centralized `registry.py`. The evaluation, visualization, and app layers all import from this registry, so adding a new model variant requires only a single registry entry.
 
-### Category Remapping
+### 9.2 Category Remapping
 
 The `src.category_groups` module implements the full category hierarchy. Functions like `get_scheme()`, `detect_source_space()`, and `coarsest_common_space()` allow the evaluation code to automatically determine the appropriate evaluation space for any model-target pair and remap ground truth annotations accordingly. This is used throughout the cross-dataset evaluation, feature visualization, and prediction visualization pipelines.
 
@@ -201,6 +220,8 @@ The data leakage issue in the original TrashCan split is also a practical findin
 
 ## 11. Future Work
 
+### 11.1 Overview
+
 The techniques described in 6 above (random grayscale and synthetic CCTV-style text overlays) for closing the cross-domain generalization gap were largely unsuccessful. However, we don't believe that attempting to close the gap is futile. The techniques we tried so far all more or less domain-agnostic -- we think it's certainly worth trying some domain-specific techniques such as FDA/FSR (see below).
 
 Some other possible directions for future work:
@@ -208,6 +229,6 @@ Some other possible directions for future work:
 - Training deployment-oriented models in coarsened category spaces (e.g., binary trash/non-trash detection) tailored to specific cleanup scenarios could yield practically useful performance levels for real-time robotic applications. 
 - Finally, expanding the pooled training set with additional underwater datasets would test whether the benefits of pooling scale with data diversity.
 
-### FDA/FSR
+### 11.2 FDA/FSR
 
 Domain adaptation techniques such as Fourier Domain Adaptation (FDA) and Fourier Style Restitution (FSR) could help to close the remaining visual domain gap without requiring pooled training data. This repository implements FDA/FSR for training-time and/or test-time augmentation of the low-frequency disks of images in Fourier space, but we haven't found time yet to train or test models using these implementations. 
